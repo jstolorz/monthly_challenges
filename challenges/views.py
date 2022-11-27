@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 
 monthly_challenges = {
     "january": "Eat no meat for the entire month!",
@@ -17,7 +17,11 @@ monthly_challenges = {
 
 def monthly_challenge_by_number(request, month):
     months = list(monthly_challenges.keys())
-    forward_month = months[month]
+
+    if month > len(months):
+        return HttpResponseNotFound('Invalid month')
+
+    forward_month = months[month - 1]
     return HttpResponseRedirect('/challenges/' + forward_month)
 
 
